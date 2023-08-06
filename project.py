@@ -59,6 +59,7 @@ def ball_animation():
     if ball.bottom >= screen_height or ball.top <= 0:
         pygame.mixer.Sound.play(pong_sound)
         ball_speed_y *= -1
+        rand = random.randint(0, 1)
 
     if ball.right >= screen_width:
         pygame.mixer.Sound.play(score_sound)
@@ -79,7 +80,6 @@ def ball_animation():
         elif abs(ball.top - player.bottom) < 10 and ball_speed_y < 10:
             ball_speed_y *= -1
             
-        rand = random.randint(0, 1)
 
     if ball.colliderect(opponent) and ball_speed_x < 0:
         pygame.mixer.Sound.play(pong_sound)
@@ -90,7 +90,7 @@ def ball_animation():
         elif abs(ball.top - opponent.bottom) < 10 and ball_speed_y < 10:
             ball_speed_y *= -1
             
-        rand = random.randint(0, 1)
+        # rand = random.randint(0, 1)
 
 
 def player_animation():
@@ -117,7 +117,7 @@ def opponent_ai():
     if rand == 0:
         if opponent.bottom > ball.bottom:
             opponent.bottom -= opponent_speed
-    elif rand == 1:
+    else:
         if opponent.bottom > ball.y:
             opponent.bottom -= opponent_speed
 
