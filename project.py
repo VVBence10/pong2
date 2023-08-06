@@ -37,6 +37,9 @@ current_time = 0
 number_two = None
 number_one = None
 number_three = None
+rand = 0
+
+
 
 # text variables
 game_font = pygame.font.Font("freesansbold.ttf", 30)
@@ -48,7 +51,7 @@ score_sound = pygame.mixer.Sound("score.ogg")
 
 # functions
 def ball_animation():
-    global ball_speed_x, ball_speed_y, opponent_score, player_score, score_time
+    global ball_speed_x, ball_speed_y, opponent_score, player_score, score_time, rand
     # move the ball
     ball.x += ball_speed_x
     ball.y += ball_speed_y
@@ -75,6 +78,8 @@ def ball_animation():
             ball_speed_y *= -1
         elif abs(ball.top - player.bottom) < 10 and ball_speed_y < 10:
             ball_speed_y *= -1
+            
+        rand = random.randint(0, 1)
 
     if ball.colliderect(opponent) and ball_speed_x < 0:
         pygame.mixer.Sound.play(pong_sound)
@@ -84,6 +89,8 @@ def ball_animation():
             ball_speed_y *= -1
         elif abs(ball.top - opponent.bottom) < 10 and ball_speed_y < 10:
             ball_speed_y *= -1
+            
+        rand = random.randint(0, 1)
 
 
 def player_animation():
@@ -101,13 +108,18 @@ def opponent_animation():
         opponent.bottom = screen_height
     opponent.y += opponent_speed
 
-
 def opponent_ai():
-    if opponent.top < ball.y:
-        opponent.top += opponent_speed
+    global rand
+    print(rand)
 
-    if opponent.bottom > ball.y:
-        opponent.bottom -= opponent_speed
+    if opponent.top < ball.top:
+        opponent.top += opponent_speed
+    if rand == 0:
+        if opponent.bottom > ball.bottom:
+            opponent.bottom -= opponent_speed
+    elif rand == 1:
+        if opponent.bottom > ball.y:
+            opponent.bottom -= opponent_speed
 
     if opponent.top <= 0:
         opponent.top = 0
@@ -117,10 +129,12 @@ def opponent_ai():
 
 
 def ball_start():
-    global ball_speed_x, ball_speed_y, current_time, level, score_time, number_two, number_one, number_three
+    global ball_speed_x, ball_speed_y, current_time, level, score_time, number_two, number_one, number_three, rand
+    
 
     current_time = pygame.time.get_ticks()
     ball.center = (screen_width / 2, screen_height / 2)
+    rand = 0
 
     if current_time - score_time < 300:
         number_three = game_font.render("3", False, lighter_grey)
